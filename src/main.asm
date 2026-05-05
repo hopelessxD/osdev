@@ -1,6 +1,30 @@
 org 0x7C00 ;tells nasm where to start the code usually 0x7C00 is the start of an operating system
 bits 16    ;declaring a 16 bit os
 
+start:
+    jmp main
+
+;prints string to screen
+;params:
+;   -ds:si points to string
+
+puts:
+    ;push registers that we are modifying to save them before entering the main loop
+    push si
+    push ax
+
+.loop:
+    lodsb           ;loads a byte from ds:si then increments si very nice function 
+    or al,al        ;verify if next character is null or not since or changes nothing except the zero flag
+    jz .done
+    jmp .loop
+
+.done:
+    pop ax
+    pop si
+    ret
+
+;until here, the function takes a string, iterates every character until it encounters null and then exits
 
 main:
 
