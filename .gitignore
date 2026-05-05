@@ -1,0 +1,29 @@
+# Build output
+build/
+out/
+
+# Object files
+*.o
+*.obj
+*.elf
+
+# OS binaries / disk images
+*.bin
+*.img
+*.iso
+
+# Logs
+*.log
+
+# Temp files
+*.tmp
+*.swp
+*~
+
+# Editor folders
+.vscode/
+.idea/
+
+# OS junk files
+Thumbs.db
+.DS_Store   
