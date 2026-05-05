@@ -27,3 +27,6 @@ out/
 # OS junk files
 Thumbs.db
 .DS_Store   
+
+.git-credentials
+.env
