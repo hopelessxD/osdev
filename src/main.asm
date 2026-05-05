@@ -3,6 +3,17 @@ bits 16    ;declaring a 16 bit os
 
 
 main:
+
+    ;setup data segment
+    mov ax,0
+    mov ds,ax
+    mov es,ax ;ensures ds/es can only be accessed using ax
+
+    ;setup stack segments
+    mov ss,ax
+    mov sp, 0x7C00 ;stack grows downward, if we put at last of os it will override the operating system so we put at the first
+
+
     hlt
 
 .halt:
