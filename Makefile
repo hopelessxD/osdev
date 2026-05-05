@@ -2,7 +2,7 @@ ASM = nasm
 BUILD_DIR = build
 SRC_DIR = src
 
-.PHONY: all floppy_image run kernel bootloader clean always
+.PHONY: all floppy_image kernel bootloader clean always
 
 #
 #Floppy image
@@ -44,11 +44,7 @@ clean:
 	rm -rf $(BUILD_DIR)/*
 
 
-#
-#run
-#
-run:
-	qemu-system-x86_64 -fda $(BUILD_DIR)/main_floppy.img
+
 
 
 
