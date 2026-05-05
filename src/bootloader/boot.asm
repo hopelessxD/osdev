@@ -3,6 +3,36 @@ bits 16    ;declaring a 16 bit os
 
 %define ENDL 0x0D,0x0A ;hex code to go the the first of the line then jump down one line
 
+;
+;fat12 header
+;
+
+jmp short start                                     ;2 bytes
+nop                                                 ;1 byte
+
+bdb_oem:                     db 'MSWIN4.1'          ;8 bytes
+bdb_bytes_per_sector:        dw 512
+bdb_sectors_per_cluster:     db 1
+bdb_reserved_sectors:        dw 1
+bdb_number_of_fats:          db 2
+bdb_dir_entries:             dw 0xe0
+bdb_total_sectors:           dw 2880                ;2880 * 512 = 1.44MB
+bdb_media_type:              db 0xf0
+bdb_sectors_per_fat          dw 9
+bdb_sectors_per_track        dw 18
+bdb_heads:                   dw 2
+bdb_hidden_sectors:          dd 0
+bdb_large_sector_count:      dd 0
+
+;extended boot record
+
+ebr_drive_num:              db 0x00                 ;0x00 for floppy, 0x80 for hdd
+                            db 0                    ;reserved
+ebr_signature:              db 29h          
+ebr_volume_id:              db 69h, 69h, 69h, 69h   ;serial number, value doesnt matter
+ebr_volume_label:           db 'PRASANNA P.'        ;11 bytes,padded with string
+ebr_system_id:              db 'FAT12   '           ;8 bytes
+
 
 
 start:
