@@ -113,9 +113,29 @@ lba_to_chs:
     or cl,ah
 
     pop dx
-    mov dl,al
     pop ax
     ret
+
+;
+;read sectors from disk
+;params:
+;   - ax : lba 
+;   - cl : number of sectors to read
+;   - dl : drive number
+;   - es:bx : memory location where data is stored
+
+disk_read:
+    push cx                     ; temporarily save CL i.e. number of sectors to read
+    call lba_to_chs             ; compute CHS
+    pop ax                      ; AL = number of sectors to read
+
+    mov ah,02h
+    int 13h
+
+
+
+
+
 
 msg_hello: db 'hello world',ENDL,0
 
