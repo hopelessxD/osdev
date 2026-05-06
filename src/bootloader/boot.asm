@@ -82,6 +82,41 @@ main:
 .halt:
     jmp .halt   ;infinite loop to ensure nothing breaks down
 
+
+
+;
+;Convert LBA to CHS 
+;Params:
+;   - ax: LBA address
+;Returns:
+;   -cx [bits 0-5]  : sector number
+;   -cx [bits 6-15] : cylinder
+;   -dh: head
+
+lba_to_chs:
+
+    push ax
+    push dx
+
+    mov dx,0                            ;dx=0
+    div word [bdb_sectors_per_track]    ;ax = LBA / sectors per track
+                                        ;dx = LBA % sectors per track
+    inc dx                              ;dx = {LBA % sectors per track} + 1 = sector
+    mov cx,dx
+
+    mov dx,0
+    div word [bdb_heads]                ;ax = (LBA / sectors per track) / head = cylinder
+                                        ;dx = (LBA / sectors per track) % head = head 
+    mov dh,dl                           ;dl = head
+    mov ch,al                           ;al=cylinder 
+    shl ah,6
+    or cl,ah
+
+    pop dx
+    mov dl,al
+    pop ax
+    ret
+
 msg_hello: db 'hello world',ENDL,0
 
 
