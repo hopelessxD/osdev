@@ -73,6 +73,15 @@ main:
     mov ss,ax
     mov sp, 0x7C00 ;stack grows downward, if we put at last of os it will override the operating system so we put at the first
 
+    ;read something from the disk
+    mov [ebr_drive_num], dl ; BIOS sets drive number in dl register, we save it in our ebr_volume_label
+
+    mov ax,1    ; LBA = 1, second sector from the disk
+    mov cl,1    ; 1 sector to read
+    mov bx,0x7e00
+    call disk_read
+
+
     ;print message
     mov si, msg_hello
     call puts
