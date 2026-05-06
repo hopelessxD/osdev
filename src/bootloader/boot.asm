@@ -138,12 +138,63 @@ lba_to_chs:
 ;   - es:bx : memory location where data is stored
 
 disk_read:
-    push cx                     ; temporarily save CL i.e. number of sectors to read
-    call lba_to_chs             ; compute CHS
-    pop ax                      ; AL = number of sectors to read
+    push ax                             ; save registers
+    push bx
+    push cx
+    push dx
+    push di
 
-    mov ah,02h
+    push cx                             ; save number of sectors to read
+    call lba_to_chs                     ; compute CHS
+    pop ax                              ; AL = number of sectors to read
+    
+    mov di, 3                           ; retry count
+
+.retry:
+    pusha                               ; save all registers for retry
+    stc                                 ; set carry flag (some BIOS don't set it on error)
+    mov ah, 02h
     int 13h
+    jnc .done                           ; jump if carry not set (success)
+
+    ; read failed
+    popa
+    call disk_reset
+    dec di
+    jnz .retry
+
+.fail:
+    ; after all attempts, still failed
+    jmp disk_error
+
+.done:
+    popa
+    pop di                              ; restore registers
+    pop dx
+    pop cx
+    pop bx
+    pop ax
+    ret
+
+disk_reset:
+    pusha
+    mov ah, 0
+    int 13h
+    jc disk_error
+    popa
+    ret
+
+disk_error:
+    mov si, msg_disk_err
+    call puts
+    jmp .halt
+
+.halt:
+    cli
+    hlt
+    jmp .halt
+
+msg_disk_err: db 'Disk read failed!', ENDL, 0
 
 
 
