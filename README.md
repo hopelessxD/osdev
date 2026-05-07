@@ -1,7 +1,7 @@
-# osdev
+# osdev-16
 
-help
-  -16-bit
-  -no bootloader
+help<br>
+  -16-bit<br>
+  -no bootloader<br>
   -FAT 12
   
